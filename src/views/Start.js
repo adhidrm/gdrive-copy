@@ -152,7 +152,7 @@ export default class Start extends React.Component {
   }
 
   handleSubmit(e) {
-    this.processing('Initializing the folder copy');
+    this.processing('Mulai menyalin folder dan file...');
     const _this = this;
     if (process.env.NODE_ENV === 'production') {
       google.script.run
@@ -161,7 +161,7 @@ export default class Start extends React.Component {
             destFolderID: result.destFolderId,
             copyLogID: result.spreadsheetId
           });
-          _this.showSuccess('Copying has started in background');
+          _this.showSuccess('Proses penyalinan sudah dimulai di background');
           // after initialized, this begins the copy loop
           google.script.run.copy();
         })
@@ -204,7 +204,7 @@ export default class Start extends React.Component {
       srcFolderID: id,
       srcFolderName: name,
       srcParentID: parentID,
-      destFolderName: 'Copy of ' + name
+      destFolderName: 'Salinan dari ' + name
     });
   }
 
@@ -293,21 +293,21 @@ export default class Start extends React.Component {
 
         <Stepper activeStep={this.state.stepNum}>
           <Step>
-            <StepLabel>Select folder</StepLabel>
+            <StepLabel>Pilih folder</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Name the copy</StepLabel>
+            <StepLabel>Nama folder salinan</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Choose options</StepLabel>
+            <StepLabel>Pilihan</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Review and confirm</StepLabel>
+            <StepLabel>Periksa dan konfirmasi</StepLabel>
           </Step>
         </Stepper>
 
         <PageChanger activeStep={this.state.stepNum}>
-          <Page stepNum={0} label="Which folder would you like to copy?">
+          <Page stepNum={0} label="Folder apa yang mau disalin?">
             <SelectFolder
               handleFolderSelect={this.handleFolderSelect}
               showError={this.showError}
@@ -322,36 +322,36 @@ export default class Start extends React.Component {
                 <RaisedButton
                   onClick={this.nextView}
                   primary={true}
-                  label="Next"
+                  label="Lanjut"
                 />
               </div>
             )}
           </Page>
 
-          <Page label="Name your copy" stepNum={1}>
+          <Page label="Beri nama pada salinan" stepNum={1}>
             <TextField
               key="folderCopy"
               id="folderCopy"
               name="folderCopyName"
               onChange={this.handleDestFolderChange}
-              floatingLabelText="Copy name"
+              floatingLabelText="Nama salinan"
               value={this.state.destFolderName}
             />
             <div className="controls">
               <FlatButton
-                label="Go back"
+                label="Kembali"
                 onClick={this.reset}
                 style={{ marginRight: '1em' }}
               />
               <RaisedButton
                 onClick={this.nextView}
                 primary={true}
-                label="Next"
+                label="Lanjut"
               />
             </div>
           </Page>
 
-          <Page label="Choose copying options" stepNum={2}>
+          <Page label="Pilih fitur salinan" stepNum={2}>
             <h3>Permissions</h3>
             <Checkbox
               checked={this.state['copyPermissions']}
@@ -359,15 +359,14 @@ export default class Start extends React.Component {
               id="copyPermissions"
               label={
                 <span>
-                  Copy permissions
+                  Izin salinan
                   <br />
-                  Sharing settings from the original folder and files will be
-                  copied
+                  Pengaturan bagi file dari file/folder asli akan diterapkan pada folder salinan
                 </span>
               }
             />
 
-            <h3>Copy to</h3>
+            <h3>Salin ke</h3>
 
             <RadioButtonGroup
               name="copyTo"
@@ -400,21 +399,21 @@ export default class Start extends React.Component {
 
             <div className="controls">
               <FlatButton
-                label="Go back"
+                label="Kembali"
                 onClick={this.prevView}
                 style={{ marginRight: '1em' }}
               />
               <RaisedButton
                 onClick={this.nextView}
                 primary={true}
-                label="Next"
+                label="Lanjut"
               />
             </div>
           </Page>
 
-          <Page label="Review and start copying" stepNum={3}>
+          <Page label="Periksa dan konfirmasi" stepNum={3}>
             <Panel>
-              <h3>Original Folder</h3>
+              <h3>Folder Original</h3>
 
               <FolderLink
                 folderID={this.state.srcFolderID}
@@ -423,39 +422,39 @@ export default class Start extends React.Component {
 
               <br />
               <br />
-              <h3>Name your copy</h3>
+              <h3>Nama dari file salinan</h3>
               <span>{this.state.destFolderName}</span>
 
               <br />
               <br />
-              <h3>Options</h3>
+              <h3>Pilihan</h3>
               <div>
-                Copy permissions to new folder?{' '}
+                Salin izin file ke folder baru?{' '}
                 {this.state.copyPermissions ? 'Yes' : 'No'}
               </div>
               <div>
-                Copy to:{' '}
+                Salin ke:{' '}
                 {this.state.copyTo === 'custom' ? (
                   <FolderLink
                     folderID={this.state.destParentID}
                     name={this.state.destParentName}
                   />
                 ) : this.state.copyTo === 'root' ? (
-                  'Root of My Drive'
+                  'Tidak dimasukan ke folder manapun'
                 ) : (
-                  'Same as original folder'
+                  'Sama dengan folder aslinya'
                 )}
               </div>
             </Panel>
 
             <div className="controls">
               <FlatButton
-                label="Start over"
+                label="Ulang dari awal?"
                 onClick={this.reset}
                 style={{ marginRight: '1em' }}
               />
               <RaisedButton
-                label="Copy Folder"
+                label="Salin folder"
                 primary={true}
                 onClick={this.handleSubmit}
               />
